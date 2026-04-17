@@ -1,0 +1,2061 @@
+{
+    "scriptId": "SERV_MUR_2023_001",
+    "version": "1.0",
+    "title": "The Null Pointer Murder",
+    "logline": "Fix the crashed engine and find the saboteur.",
+    "educational_goals": [
+        "Understand Servlet Container and Lifecycle management",
+        "Master request/response object handling",
+        "Distinguish between Forward and Redirect mechanisms",
+        "Apply MVC patterns in web applications"
+    ],
+    "characters": [
+        {
+            "characterId": "CHAR_001",
+            "name": "Alex Chen",
+            "role": "Detective",
+            "age": 35,
+            "occupation": "Security Auditor",
+            "background": "Expert in Java systems security investigating a production crash.",
+            "personality": "Analytical, Patient, Meticulous",
+            "secret": "Previously made an initialization error years ago.",
+            "knowledgePoints": [
+                "CONC_001",
+                "CONC_002"
+            ],
+            "goal": "Identify who caused the lifecycle failure without losing certification.",
+            "scenes": [
+                "SCENE_001",
+                "SCENE_002",
+                "SCENE_003"
+            ]
+        },
+        {
+            "characterId": "CHAR_002",
+            "name": "Ben Miller",
+            "role": "Suspect",
+            "age": 28,
+            "occupation": "Senior Backend Developer",
+            "background": "Developed the core service layer. Under pressure recently.",
+            "personality": "Stressed, Defensive, Technical",
+            "secret": "Skipped resource cleanup in destroy() to save time.",
+            "knowledgePoints": [
+                "CONC_003",
+                "CONC_004",
+                "CONC_005",
+                "CONC_016"
+            ],
+            "goal": "Protect his work history from being flagged as negligence.",
+            "scenes": [
+                "SCENE_001",
+                "SCENE_002",
+                "SCENE_003"
+            ]
+        },
+        {
+            "characterId": "CHAR_003",
+            "name": "Cindy Luo",
+            "role": "Suspect",
+            "age": 30,
+            "occupation": "System Architect",
+            "background": "Designed the app structure and routing logic.",
+            "personality": "Confident, Abstract-minded, Strategic",
+            "secret": "Chose Redirect over Forward incorrectly, causing data loss.",
+            "knowledgePoints": [
+                "CONC_010",
+                "CONC_011",
+                "CONC_012",
+                "CONC_017"
+            ],
+            "goal": "Maintain reputation as the smartest architect.",
+            "scenes": [
+                "SCENE_001",
+                "SCENE_002",
+                "SCENE_003"
+            ]
+        }
+    ],
+    "scenes": [
+        {
+            "sceneId": "SCENE_001",
+            "act": 1,
+            "order": 1,
+            "title": "The Dead Engine Room",
+            "location": "NeoTech Server Farm",
+            "description": "Logs show repeated exceptions during startup. The container stopped accepting requests.",
+            "charactersPresent": [
+                "CHAR_001",
+                "CHAR_002",
+                "CHAR_003"
+            ],
+            "clues": [
+                "CLUE_001",
+                "CLUE_002",
+                "CLUE_003"
+            ]
+        },
+        {
+            "sceneId": "SCENE_002",
+            "act": 2,
+            "order": 1,
+            "title": "Debug Session",
+            "location": "Meeting Room B",
+            "description": "Code review session to trace the request path through controllers.",
+            "charactersPresent": [
+                "CHAR_001",
+                "CHAR_002",
+                "CHAR_003"
+            ],
+            "clues": [
+                "CLUE_004",
+                "CLUE_005",
+                "CLUE_006"
+            ]
+        },
+        {
+            "sceneId": "SCENE_003",
+            "act": 3,
+            "order": 1,
+            "title": "Architecture Reveal",
+            "location": "Executive Boardroom",
+            "description": "Final decision on architectural responsibility for the crash.",
+            "charactersPresent": [
+                "CHAR_001",
+                "CHAR_002",
+                "CHAR_003"
+            ],
+            "clues": [
+                "CLUE_007",
+                "CLUE_008",
+                "CLUE_009"
+            ]
+        }
+    ],
+    "clues": [
+        {
+            "clueId": "CLUE_001",
+            "name": "Startup Log",
+            "type": "documentary",
+            "description": "Text file showing 'Container' initialized but instance did not call 'init().'",
+            "foundInScene": "SCENE_001",
+            "foundBy": "Alex scanning server console",
+            "reveals": "The lifecycle initialization sequence was interrupted.",
+            "relatedKnowledge": [
+                "CONC_002"
+            ]
+        },
+        {
+            "clueId": "CLUE_002",
+            "name": "Garbage Heap Dump",
+            "type": "physical",
+            "description": "Memory dump showing resources were never released.",
+            "foundInScene": "SCENE_001",
+            "foundBy": "Alex examining heap logs",
+            "reveals": "The 'destroy()' method failed to run properly.",
+            "relatedKnowledge": [
+                "CONC_005"
+            ]
+        },
+        {
+            "clueId": "CLUE_003",
+            "name": "Thread Stack",
+            "type": "digital",
+            "description": "Stack trace indicating concurrent access issues.",
+            "foundInScene": "SCENE_001",
+            "foundBy": "Alex checking multi-threading logs",
+            "reveals": "Multiple threads accessed the same service instance without lock.",
+            "relatedKnowledge": [
+                "CONC_016"
+            ]
+        },
+        {
+            "clueId": "CLUE_004",
+            "name": "Controller Code",
+            "type": "digital",
+            "description": "Snippet showing 'doPost' calling a redirect instead of forward.",
+            "foundInScene": "SCENE_002",
+            "foundBy": "Alex asking Ben",
+            "reveals": "Routing logic changed URL unexpectedly.",
+            "relatedKnowledge": [
+                "CONC_014"
+            ]
+        },
+        {
+            "clueId": "CLUE_005",
+            "name": "JSP View File",
+            "type": "documentary",
+            "description": "A view page that expects data missing from session scope.",
+            "foundInScene": "SCENE_002",
+            "foundBy": "Alex analyzing front-end files",
+            "reveals": "Data passed via forward was lost due to redirect.",
+            "relatedKnowledge": [
+                "CONC_010"
+            ]
+        },
+        {
+            "clueId": "CLUE_006",
+            "name": "Request Header",
+            "type": "digital",
+            "description": "HTTP header shows new session ID created upon reload.",
+            "foundInScene": "SCENE_002",
+            "foundBy": "Alex sniffing network packets",
+            "reveals": "Browser sent a second request, creating duplicate data.",
+            "relatedKnowledge": [
+                "CONC_011"
+            ]
+        },
+        {
+            "clueId": "CLUE_007",
+            "name": "Design Doc",
+            "type": "documentary",
+            "description": "Blueprint separating Model, View, and Controller components.",
+            "foundInScene": "SCENE_003",
+            "foundBy": "Alex reviewing archived specs",
+            "reveals": "Components were separated but coupled via RequestDispatcher.",
+            "relatedKnowledge": [
+                "CONC_012"
+            ]
+        },
+        {
+            "clueId": "CLUE_008",
+            "name": "Bean Object",
+            "type": "physical",
+            "description": "Java class holding business logic independent of UI.",
+            "foundInScene": "SCENE_003",
+            "foundBy": "Alex inspecting library jars",
+            "reveals": "Model logic was correct, but Controller misdirected it.",
+            "relatedKnowledge": [
+                "CONC_018"
+            ]
+        },
+        {
+            "clueId": "CLUE_009",
+            "name": "Main Signature",
+            "type": "digital",
+            "description": "Class definition lacking a main() function inside Servlet.",
+            "foundInScene": "SCENE_003",
+            "foundBy": "Alex reading code headers",
+            "reveals": "No main() required because Container handles execution.",
+            "relatedKnowledge": [
+                "CONC_021"
+            ]
+        }
+    ],
+    "questions": [
+        {
+            "questionId": "Q_001",
+            "sceneId": "SCENE_001",
+            "order": 1,
+            "type": "multiple_choice",
+            "difficulty": 1,
+            "content": "Who is responsible for managing the lifecycle of this software component?",
+            "knowledgeId": "CONC_001",
+            "relatedKnowledge": [
+                "CONC_002"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_001",
+                    "content": "It has its own main program and loads classes automatically.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_001",
+                    "content": "The Web Container",
+                    "isCorrect": true,
+                    "feedback": "Correct. The Container manages loading, instantiation, and destruction.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_002",
+                    "content": "The Client Browser",
+                    "isCorrect": false,
+                    "feedback": "Incorrect. Browsers send requests, but don't manage component life.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": "HINT_001"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_001",
+                "buttonText": "Learn about Containers"
+            }
+        },
+        {
+            "questionId": "Q_002",
+            "sceneId": "SCENE_001",
+            "order": 2,
+            "type": "sequencing",
+            "difficulty": 1,
+            "content": "Arrange the initial steps of a Servlet's life cycle:",
+            "knowledgeId": "CONC_002",
+            "items": [
+                {
+                    "itemId": "ITEM_001",
+                    "content": "Class Loaded into JVM"
+                },
+                {
+                    "itemId": "ITEM_002",
+                    "content": "Instance Instantiated"
+                },
+                {
+                    "itemId": "ITEM_003",
+                    "content": "Init() Method Called"
+                }
+            ],
+            "correctOrder": [
+                "ITEM_001",
+                "ITEM_002",
+                "ITEM_003"
+            ],
+            "feedbackCorrect": "Perfect order. Loading precedes instantiation, which precedes initialization.",
+            "feedbackIncorrect": "Wrong. Remember: Load -> New -> Init.",
+            "nextSceneIdCorrect": "SCENE_001",
+            "nextSceneIdIncorrect": "SCENE_001",
+            "maxAttempts": 2,
+            "learnMore": {
+                "knowledgeId": "CONC_002"
+            }
+        },
+        {
+            "questionId": "Q_003",
+            "sceneId": "SCENE_001",
+            "order": 3,
+            "type": "multiple_choice",
+            "difficulty": 1,
+            "content": "What happens in the init() method regarding configuration?",
+            "knowledgeId": "CONC_003",
+            "relatedKnowledge": [
+                "CONC_002"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_002",
+                    "content": "This method runs once per instance lifetime.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_003",
+                    "content": "Execute one-time setup like DB connections",
+                    "isCorrect": true,
+                    "feedback": "Yes, init() is for one-time initialization tasks.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_004",
+                    "content": "Process every incoming request repeatedly",
+                    "isCorrect": false,
+                    "feedback": "No. That is handled by service().",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": "HINT_002"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_003",
+                "buttonText": "Deep Dive Init"
+            }
+        },
+        {
+            "questionId": "Q_004",
+            "sceneId": "SCENE_001",
+            "order": 4,
+            "type": "multiple_choice",
+            "difficulty": 1,
+            "content": "Which method handles individual client requests?",
+            "knowledgeId": "CONC_004",
+            "relatedKnowledge": [
+                "CONC_002"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_003",
+                    "content": "It takes HttpServletRequest as argument.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_005",
+                    "content": "service()",
+                    "isCorrect": true,
+                    "feedback": "Correct. It dispatches requests to doGet/doPost.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_006",
+                    "content": "main()",
+                    "isCorrect": false,
+                    "feedback": "No, Servlets do not have a main() method.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": "HINT_003"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_004",
+                "buttonText": "Service Details"
+            }
+        },
+        {
+            "questionId": "Q_005",
+            "sceneId": "SCENE_001",
+            "order": 5,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "How does the container handle thread usage during service()? ",
+            "knowledgeId": "CONC_016",
+            "relatedKnowledge": [
+                "CONC_004"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_004",
+                    "content": "One thread per request for the same instance.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_007",
+                    "content": "Creates a new thread for each request",
+                    "isCorrect": true,
+                    "feedback": "Right. Concurrent access requires thread safety.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_008",
+                    "content": "Runs on the main thread only",
+                    "isCorrect": false,
+                    "feedback": "Wrong. This would block other users.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": "HINT_004"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_016",
+                "buttonText": "Threading Info"
+            }
+        },
+        {
+            "questionId": "Q_006",
+            "sceneId": "SCENE_001",
+            "order": 6,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "What happens if destroy() is skipped before unloading?",
+            "knowledgeId": "CONC_005",
+            "relatedKnowledge": [
+                "CONC_002"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_005",
+                    "content": "Resources like connections remain open.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_009",
+                    "content": "Resource leakage occurs",
+                    "isCorrect": true,
+                    "feedback": "Correct. Garbage collection follows later but leaks persist until then.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_010",
+                    "content": "Memory is immediately freed",
+                    "isCorrect": false,
+                    "feedback": "No. Connections hold up memory until explicit release.",
+                    "nextSceneId": "SCENE_001",
+                    "unlockClues": [],
+                    "showHint": "HINT_005"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_005",
+                "buttonText": "Destroy Method"
+            }
+        },
+        {
+            "questionId": "Q_007",
+            "sceneId": "SCENE_002",
+            "order": 1,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which method receives GET requests in HttpServlet?",
+            "knowledgeId": "CONC_013",
+            "relatedKnowledge": [
+                "CONC_006"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_006",
+                    "content": "Starts with 'do'.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_011",
+                    "content": "doGet()",
+                    "isCorrect": true,
+                    "feedback": "Yes. doGet handles retrieval operations.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_012",
+                    "content": "doPut()",
+                    "isCorrect": false,
+                    "feedback": "Put is for updates, Get is for read.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_006"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_013",
+                "buttonText": "DoGet Details"
+            }
+        },
+        {
+            "questionId": "Q_008",
+            "sceneId": "SCENE_002",
+            "order": 2,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which class provides HTTP-specific functionality?",
+            "knowledgeId": "CONC_006",
+            "relatedKnowledge": [
+                "CONC_015"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_007",
+                    "content": "Extends GenericServlet.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_013",
+                    "content": "HttpServlet",
+                    "isCorrect": true,
+                    "feedback": "Correct. It specializes in HTTP protocol.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_014",
+                    "content": "GenericServlet",
+                    "isCorrect": false,
+                    "feedback": "Generic is for any protocol, HttpServlet is specifically HTTP.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_007"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_006",
+                "buttonText": "HttpServlet"
+            }
+        },
+        {
+            "questionId": "Q_009",
+            "sceneId": "SCENE_002",
+            "order": 3,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which interface encapsulates browser request data?",
+            "knowledgeId": "CONC_007",
+            "relatedKnowledge": [
+                "CONC_004"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_008",
+                    "content": "It starts with 'Http'.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_015",
+                    "content": "HttpServletRequest",
+                    "isCorrect": true,
+                    "feedback": "Yes. Contains params, headers, cookies.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_016",
+                    "content": "HttpServletResponse",
+                    "isCorrect": false,
+                    "feedback": "That sends data back, doesn't receive.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_008"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_007",
+                "buttonText": "Request Object"
+            }
+        },
+        {
+            "questionId": "Q_010",
+            "sceneId": "SCENE_002",
+            "order": 4,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "How do you set content type for response?",
+            "knowledgeId": "CONC_008",
+            "relatedKnowledge": [
+                "CONC_004"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_009",
+                    "content": "Method name 'setContentType'.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_017",
+                    "content": "response.setContentType('text/html')",
+                    "isCorrect": true,
+                    "feedback": "Correct. Tells browser how to render.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_018",
+                    "content": "request.getWriter()",
+                    "isCorrect": false,
+                    "feedback": "Writer writes, SetType defines format.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_009"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_008",
+                "buttonText": "Response Object"
+            }
+        },
+        {
+            "questionId": "Q_011",
+            "sceneId": "SCENE_002",
+            "order": 5,
+            "type": "sequence_check",
+            "difficulty": 2,
+            "content": "Is HttpServlet abstract or concrete?",
+            "knowledgeId": "CONC_006",
+            "relatedKnowledge": [
+                "CONC_015"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_010",
+                    "content": "It cannot be instantiated directly.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_019",
+                    "content": "Abstract Class",
+                    "isCorrect": true,
+                    "feedback": "Yes, must override methods like doGet.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_020",
+                    "content": "Concrete Class",
+                    "isCorrect": false,
+                    "feedback": "No, you get compilation errors.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_010"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_006",
+                "buttonText": "See HttpServlet Definition"
+            }
+        },
+        {
+            "questionId": "Q_012",
+            "sceneId": "SCENE_002",
+            "order": 6,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which object contains parameters from form submission?",
+            "knowledgeId": "CONC_007",
+            "relatedKnowledge": [
+                "CONC_010"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_011",
+                    "content": "Use getParameter().",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_021",
+                    "content": "HttpServletRequest",
+                    "isCorrect": true,
+                    "feedback": "Correct. It wraps incoming client data.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_022",
+                    "content": "ServletContext",
+                    "isCorrect": false,
+                    "feedback": "Context is global, not per-request param storage.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_011"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_007",
+                "buttonText": "Parameters Access"
+            }
+        },
+        {
+            "questionId": "Q_013",
+            "sceneId": "SCENE_002",
+            "order": 7,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which object sends binary data like images back?",
+            "knowledgeId": "CONC_008",
+            "relatedKnowledge": [
+                "CONC_004"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_012",
+                    "content": "Get output stream to write binary.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_023",
+                    "content": "HttpServletResponse",
+                    "isCorrect": true,
+                    "feedback": "Yes. Use getOutputStream() or getWriter().",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_024",
+                    "content": "HttpServletRequest",
+                    "isCorrect": false,
+                    "feedback": "Request reads, Response writes.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_012"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_008",
+                "buttonText": "Stream Output"
+            }
+        },
+        {
+            "questionId": "Q_014",
+            "sceneId": "SCENE_002",
+            "order": 8,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "When does a Post request occur?",
+            "knowledgeId": "CONC_014",
+            "relatedKnowledge": [
+                "CONC_006"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_013",
+                    "content": "Submitting forms changes state.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_025",
+                    "content": "Submutting Data",
+                    "isCorrect": true,
+                    "feedback": "Correct. Used for inserting/updating info.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_026",
+                    "content": "Browsing Images",
+                    "isCorrect": false,
+                    "feedback": "Images usually retrieved via GET.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_013"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_014",
+                "buttonText": "DoPost Logic"
+            }
+        },
+        {
+            "questionId": "Q_015",
+            "sceneId": "SCENE_002",
+            "order": 9,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "What mechanism allows internal server request sharing?",
+            "knowledgeId": "CONC_010",
+            "relatedKnowledge": [
+                "CONC_009"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_014",
+                    "content": "Browser URL stays same.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 3,
+            "options": [
+                {
+                    "optionId": "OPT_027",
+                    "content": "Forward",
+                    "isCorrect": true,
+                    "feedback": "Yes. One request processed internally.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_028",
+                    "content": "Redirect",
+                    "isCorrect": false,
+                    "feedback": "Redirect causes browser refresh and new request.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_014"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_010",
+                "buttonText": "Forward Mechanism"
+            }
+        },
+        {
+            "questionId": "Q_016",
+            "sceneId": "SCENE_002",
+            "order": 10,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "What interface provides getRequestDispatcher?",
+            "knowledgeId": "CONC_009",
+            "relatedKnowledge": [
+                "CONC_007"
+            ],
+            "hints": [
+                {
+                    "hintId": "HINT_015",
+                    "content": "Available on Request object.",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_029",
+                    "content": "ServletRequest",
+                    "isCorrect": true,
+                    "feedback": "Correct. It creates the dispatcher.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_030",
+                    "content": "ServletResponse",
+                    "isCorrect": false,
+                    "feedback": "Response doesn't dispatch requests.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_015"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_009",
+                "buttonText": "Request Dispatcher"
+            }
+        },
+        {
+            "questionId": "Q_017",
+            "sceneId": "SCENE_002",
+            "order": 11,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "Which statement is TRUE about Redirect?",
+            "knowledgeId": "CONC_011",
+            "relatedKnowledge": [
+                "CONC_008"
+            ],
+            "hints":  [
+                {
+                    "hintId": "HINT_016",
+                    "content": "Requires two HTTP requests.",
+                    "unlockAfterAttempts": 1
+                }
+                ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_031",
+                    "content": "URL changes to new address",
+                    "isCorrect": true,
+                    "feedback": "Yes. It's a new request initiated by browser.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_016"
+                },
+                {
+                    "optionId": "OPT_032",
+                    "content": "Server forwards silently",
+                    "isCorrect": false,
+                    "feedback": "That describes Forward, not Redirect.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_016"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_011",
+                "buttonText": "Redirect Behavior"
+            }
+        },
+        {
+            "questionId": "Q_018",
+            "sceneId": "SCENE_002",
+            "order": 12,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "When should you use Redirect?",
+            "knowledgeId": "CONC_011",
+            "relatedKnowledge": [
+                "CONC_010"
+            ],
+            "hints": [{
+                "hintId": "HINT_017",
+                "content": "Prevent re-submitting on reload.",
+                "unlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_033",
+                    "content": "After INSERT/UPDATE operations",
+                    "isCorrect": true,
+                    "feedback": "Yes. Avoids duplicate database actions on refresh.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_017"
+                },
+                {
+                    "optionId": "OPT_034",
+                    "content": "For SELECT queries",
+                    "isCorrect": false,
+                    "feedback": "SELECT can be forwarded safely.",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": [],
+                    "showHint": "HINT_017"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_011",
+                "buttonText": "Usage Rules"
+            }
+        },
+        {
+            "questionId": "Q_019",
+            "sceneId": "SCENE_002",
+            "order": 13,
+            "type": "sequencing",
+            "difficulty": 3,
+            "content": "Sequence the Redirect process:",
+            "knowledgeId": "CONC_011",
+            "items": [
+                {
+                    "itemId": "ITEM_004",
+                    "content": "Client sends first request"
+                },
+                {
+                    "itemId": "ITEM_005",
+                    "content": "Server sends redirect status"
+                },
+                {
+                    "itemId": "ITEM_006",
+                    "content": "Client sends second request to new URL"
+                }
+            ],
+            "correctOrder": [
+                "ITEM_004",
+                "ITEM_005",
+                "ITEM_006"
+            ],
+            "feedbackCorrect": "Correct. Two round trips distinguish Redirect.",
+            "feedbackIncorrect": "Wrong. Browser must receive the instruction first.",
+            "nextSceneIdCorrect": "SCENE_002",
+            "nextSceneIdIncorrect": "SCENE_002",
+            "maxAttempts": 2,
+            "learnMore": {
+                "knowledgeId": "CONC_011"
+            }
+        },
+        {
+            "questionId": "Q_020",
+            "sceneId": "SCENE_003",
+            "order": 1,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "What separates business logic from UI?",
+            "knowledgeId": "CONC_012",
+            "relatedKnowledge": [
+                "CONC_018"
+            ],
+            "hints": [{
+                        "hintId": "HINT_018",
+                        "content": "Design pattern with three components.",
+                        "unlockAfterAttempts": 1
+                    }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_035",
+                    "content": "MVC Design Pattern",
+                    "isCorrect": true,
+                    "feedback": "Yes. Model/View/Controller separation.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_018"
+                },
+                {
+                    "optionId": "OPT_036",
+                    "content": "Monolithic Structure",
+                    "isCorrect": false,
+                    "feedback": "That mixes everything together.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_018"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_012",
+                "buttonText": "MVC Explained"
+            }
+        },
+        {
+            "questionId": "Q_021",
+            "sceneId": "SCENE_003",
+            "order": 2,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which component represents business logic?",
+            "knowledgeId": "CONC_018",
+            "relatedKnowledge": [
+                "CONC_012"
+            ],
+            "hints": [{
+                "hintId": "HINT_019",
+                "content": "Contains data and rules.",
+                "unlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_037",
+                    "content": "Model",
+                    "isCorrect": true,
+                    "feedback": "Correct. Handles data and domain logic.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_038",
+                    "content": "View",
+                    "isCorrect": false,
+                    "feedback": "View displays, Model processes.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_019"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_018",
+                "buttonText": "Model Component"
+            }
+        },
+        {
+            "questionId": "Q_022",
+            "sceneId": "SCENE_003",
+            "order": 3,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which component handles user input?",
+            "knowledgeId": "CONC_020",
+            "relatedKnowledge": [
+                "CONC_012"
+            ],
+            "hints": [{
+                "hintId": "HINT_020",
+                "content": "Acts as intermediary between Model and View.",
+                "unlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_039",
+                    "content": "Controller",
+                    "isCorrect": true,
+                    "feedback": "Yes. Receives HTTP requests and routes them.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_040",
+                    "content": "Model",
+                    "isCorrect": false,
+                    "feedback": "Model does logic, Controller handles input.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_020"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_020",
+                "buttonText": "Controller Role"
+            }
+        },
+        {
+            "questionId": "Q_023",
+            "sceneId": "SCENE_003",
+            "order": 4,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Which technology is typically used as View?",
+            "knowledgeId": "CONC_019",
+            "relatedKnowledge": [
+                "CONC_017"
+            ],
+            "hints": [{
+                "hintId": "HINT_021",
+                "content": "Java-based templating for HTML.",
+                "unlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_022",
+                "content": "Can embed Java code in HTML.",
+                "unlockAfterAttempts": 1
+            }
+        ],
+        "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_041",
+                    "content": "JSP",
+                    "isCorrect": true,
+                    "feedback": "Yes. JavaServer Pages for presentation.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_042",
+                    "content": "Servlet Interface",
+                    "isCorrect": false,
+                    "feedback": "Interface defines contract, not display.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_021"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_019",
+                "buttonText": "View Technology"
+            }
+        },
+        {
+            "questionId": "Q_024",
+            "sceneId": "SCENE_003",
+            "order": 5,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "Does a Servlet require a main() method?",
+            "knowledgeId": "CONC_021",
+            "relatedKnowledge": [
+                "CONC_001"
+            ],
+            "hints": [{
+                "hintId": "HINT_023",
+                "content": "Container manages lifecycle, not OS.",
+                "unlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_024",
+                "content": "Managed by Container, not OS.",
+                "unlockAfterAttempts": 1
+            }
+        ],
+        "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_043",
+                    "content": "No",
+                    "isCorrect": true,
+                    "feedback": "Correct. Container starts it via init().",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_044",
+                    "content": "Yes",
+                    "isCorrect": false,
+                    "feedback": "No. Standard Java apps have main().",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_022"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_021",
+                "buttonText": "Servlet Interface"
+            }
+        },
+        {
+            "questionId": "Q_025",
+            "sceneId": "SCENE_003",
+            "order": 6,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "What implements the Servlet API contract?",
+            "knowledgeId": "CONC_021",
+            "relatedKnowledge": [
+                "CONC_015"
+            ],
+            "hints": [{
+                "hintId": "HINT_023",
+                "content": "Defines lifecycle methods like init(), service(), destroy().",
+                "UnlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_024",
+                "content": "javax.servlet.Servlet",
+                "UnlockAfterAttempts": 1
+            }
+        ],
+        "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_045",
+                    "content": "Servlet Interface",
+                    "isCorrect": true,
+                    "feedback": "Yes. Defines lifecycle methods.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_046",
+                    "content": "Web Browser",
+                    "isCorrect": false,
+                    "feedback": "Browser uses the interface but isn't it.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_023"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_021",
+                "buttonText": "Core Interface"
+            }
+        },
+        {
+            "questionId": "Q_026",
+            "sceneId": "SCENE_003",
+            "order": 7,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "GenericServlet is protocol-independent?",
+            "knowledgeId": "CONC_015",
+            "relatedKnowledge": [
+                "CONC_001"
+            ],
+            "hints": [{
+                "hintId": "HINT_024",
+                "content": "Yes. It abstracts protocol specifics.",
+                "UnlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_025",
+                "content": "GenericServlet is a base class.",
+                "UnlockAfterAttempts": 1
+            }
+        ],
+        "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_047",
+                    "content": "Yes",
+                    "isCorrect": true,
+                    "feedback": "Yes. Designed to work with any protocol.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_048",
+                    "content": "No",
+                    "isCorrect": false,
+                    "feedback": "Incorrect. It abstracts protocol specifics.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_024"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_015",
+                "buttonText": "GenericServlet Base"
+            }
+        },
+        {
+            "questionId": "Q_027",
+            "sceneId": "SCENE_003",
+            "order": 8,
+            "type": "multiple_choice",
+            "difficulty": 2,
+            "content": "JSP is primarily used for which MVC part?",
+            "knowledgeId": "CONC_017",
+            "relatedKnowledge": [
+                "CONC_019"
+            ],
+            "hints": [{
+                "hintId": "HINT_026",
+                "content": "Focuses on presentation, not logic.",
+                "UnlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_027",
+                "content": "JSP is part of the Presentation Layer.",
+                "UnlockAfterAttempts": 1
+            }
+        ],
+        "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_049",
+                    "content": "View",
+                    "isCorrect": true,
+                    "feedback": "Correct. Generates dynamic HTML pages.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_050",
+                    "content": "Model",
+                    "isCorrect": false,
+                    "feedback": "JSP is for display, not business logic.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_025"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_017",
+                "buttonText": "JSP Role"
+            }
+        },
+        {
+            "questionId": "Q_028",
+            "sceneId": "SCENE_003",
+            "order": 9,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "Where is 'forward' performed?",
+            "knowledgeId": "CONC_010",
+            "relatedKnowledge": [
+                "CONC_001"
+            ],
+            "hints": [{
+                "hintId": "HINT_028",
+                "content": "Not visible to client.",
+                "UnlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_051",
+                    "content": "Internal Server Processing",
+                    "isCorrect": true,
+                    "feedback": "Yes. Invisible to the client.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_052",
+                    "content": "Browser Rendering",
+                    "isCorrect": false,
+                    "feedback": "Browser thinks it's the original request.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_026"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_010",
+                "buttonText": "Server Forwarding"
+            }
+        },
+        {
+            "questionId": "Q_029",
+            "sceneId": "SCENE_003",
+            "order": 10,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "If I want to avoid duplicate database inserts, which should I use?",
+            "knowledgeId": "CONC_011",
+            "relatedKnowledge": [
+                "CONC_010"
+            ],
+            "hints": [{
+                "hintId": "HINT_027",
+                "content": "Redirect causes a new request, preventing re-submission.",
+                "UnlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_028",
+                "content": "Reloadable URL prevents re-post.",
+                "UnlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_053",
+                    "content": "Redirect",
+                    "isCorrect": true,
+                    "feedback": "Correct. Browser resets state on reload.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_054",
+                    "content": "Forward",
+                    "isCorrect": false,
+                    "feedback": "Forward keeps the POST method ready to repeat.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_027"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_011",
+                "buttonText": "Avoid Duplicates"
+            }
+        },
+        {
+            "questionId": "Q_030",
+            "sceneId": "SCENE_003",
+            "order": 11,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "What is the relationship between HttpServletRequest and Forward?",
+            "knowledgeId": "CONC_007",
+            "relatedKnowledge": [
+                "CONC_010"
+            ],
+            "hints": [{
+                "hintId": "HINT_029",
+                "content": "Request attributes remain available after Forward.",
+                "UnlockAfterAttempts": 1
+            },
+            {
+                "hintId": "HINT_030",
+                "content": "Both share context in Forward.",
+                "UnlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_055",
+                    "content": "Request Scope Shared",
+                    "isCorrect": true,
+                    "feedback": "Yes. Attributes stay available in target.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_056",
+                    "content": "Request Lost",
+                    "isCorrect": false,
+                    "feedback": "Only lost in Redirect.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_028"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_007",
+                "buttonText": "Request Scope"
+            }
+        },
+        {
+            "questionId": "Q_031",
+            "sceneId": "SCENE_003",
+            "order": 12,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "Which object wraps session information?",
+            "knowledgeId": "CONC_007",
+            "relatedKnowledge": [
+                "CONC_007"
+            ],
+            "hints": [{
+                "hintId": "HINT_030",
+                "content": "Session is accessed via request.",  
+                "UnlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_057",
+                    "content": "HttpServletRequest",
+                    "isCorrect": true,
+                    "feedback": "Yes. You retrieve session from request.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_058",
+                    "content": "HttpServletResponse",
+                    "isCorrect": false,
+                    "feedback": "You write cookies here, but session comes from request.",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_029"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_007",
+                "buttonText": "Session Management"
+            }
+        },
+        {
+            "questionId": "Q_032",
+            "sceneId": "SCENE_003",
+            "order": 13,
+            "type": "multiple_choice",
+            "difficulty": 3,
+            "content": "Who calls service() when a request arrives?",
+            "knowledgeId": "CONC_004",
+            "relatedKnowledge": [
+                "CONC_001"
+            ],
+            "hints": [{
+
+                "hintId": "HINT_031",
+                "content": "Container manages the lifecycle and method calls.",
+                "UnlockAfterAttempts": 1
+            }],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_059",
+                    "content": "Servlet Container",
+                    "isCorrect": true,
+                    "feedback": "Yes. Container orchestrates the thread and method call.",
+                    "nextSceneId": "Ending",
+                    "unlockClues": [],
+                    "showHint": ""
+                },
+                {
+                    "optionId": "OPT_060",
+                    "content": "Client Browser",
+                    "isCorrect": false,
+                    "feedback": "Browser sends request, Container executes service().",
+                    "nextSceneId": "SCENE_003",
+                    "unlockClues": [],
+                    "showHint": "HINT_030"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "CONC_004",
+                "buttonText": "Service Execution"
+            }
+        }
+    ],
+    "knowledgeBase": [
+        {
+            "knowledgeId": "CONC_001",
+            "name": "Servlet Container",
+            "description": "Software component managing servlet lifecycle (load, init, service, destroy). Has main program, interacts with Web Server.",
+            "category": "object",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_001",
+                "CLUE_001"
+            ],
+            "relatedKnowledge": [
+                "CONC_002"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_002",
+            "name": "Servlet Lifecycle",
+            "description": "Full process from loading to destruction: Init, Service, Destroy. Managed by container.",
+            "category": "process",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_001",
+                "CLUE_001"
+            ],
+            "relatedKnowledge": [
+                "CONC_001"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_003",
+            "name": "init() method",
+            "description": "Called once after instantiation. Used for one-time setup (DB connection, config).",
+            "category": "method",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_001",
+                "CLUE_001"
+            ],
+            "relatedKnowledge": [
+                "CONC_002"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_004",
+            "name": "service() method",
+            "description": "Core method handling requests. Called by container for each request using threading.",
+            "category": "method",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_001",
+                "SCENE_002"
+            ],
+            "relatedKnowledge": [
+                "CONC_002"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_005",
+            "name": "destroy() method",
+            "description": "Called before unloading. Used to release resources. Prevents memory leaks.",
+            "category": "method",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_001",
+                "CLUE_002"
+            ],
+            "relatedKnowledge": [
+                "CONC_002"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_006",
+            "name": "HttpServlet",
+            "description": "Abstract class implementing service() for HTTP protocols. Provides doGet/doPost scaffolding.",
+            "category": "class",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_004"
+            ],
+            "relatedKnowledge": [
+                "CONC_015"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_007",
+            "name": "HttpServletRequest",
+            "description": "Object encapsulating client request info (params, headers, session). Accessed by doGet/doPost.",
+            "category": "interface",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_004"
+            ],
+            "relatedKnowledge": [
+                "CONC_004"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_008",
+            "name": "HttpServletResponse",
+            "description": "Object used to send responses. Sets headers, types, and writes content back to client.",
+            "category": "interface",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_006"
+            ],
+            "relatedKnowledge": [
+                "CONC_004"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_009",
+            "name": "RequestDispatcher",
+            "description": "Interface for forwarding/include. Obtained via getRequestDispatcher(). Facilitates internal routing.",
+            "category": "interface",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_005"
+            ],
+            "relatedKnowledge": [
+                "CONC_010"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_010",
+            "name": "Forward",
+            "description": "Internal server-side dispatch. URL unchanged. Request scope shared. Good for SELECT.",
+            "category": "operation",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_005"
+            ],
+            "relatedKnowledge": [
+                "CONC_009"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_011",
+            "name": "Redirect",
+            "description": "Client-side navigation. Requires new request. URL changes. Prevents double submit.",
+            "category": "operation",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_006"
+            ],
+            "relatedKnowledge": [
+                "CONC_010"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_012",
+            "name": "MVC",
+            "description": "Design pattern separating Model (data), View (display), Controller (logic/routing).",
+            "category": "pattern",
+            "difficulty": 3,
+            "appearsIn": [
+                "SCENE_003",
+                "CLUE_007"
+            ],
+            "relatedKnowledge": [
+                "CONC_018"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_013",
+            "name": "doGet() method",
+            "description": "Handles HTTP GET requests. Used for retrieving data.",
+            "category": "method",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_004"
+            ],
+            "relatedKnowledge": [
+                "CONC_006"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_014",
+            "name": "doPost() method",
+            "description": "Handles HTTP POST requests. Used for submitting/changing data.",
+            "category": "method",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_004"
+            ],
+            "relatedKnowledge": [
+                "CONC_006"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_015",
+            "name": "GenericServlet",
+            "description": "Protocol-agnostic base class. Implements Servlet/ServicConfig interfaces. Defined init/service/destroy framework.",
+            "category": "class",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_003",
+                "CLUE_004"
+            ],
+            "relatedKnowledge": [
+                "CONC_006"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_016",
+            "name": "Thread",
+            "description": "Container spawns thread per request for service(). Instance shared, thread safe coding required.",
+            "category": "concept",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_001",
+                "CLUE_003"
+            ],
+            "relatedKnowledge": [
+                "CONC_004"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_017",
+            "name": "JSP",
+            "description": "JavaServer Pages. Technology for View component. Embeds Java in HTML to produce dynamic output.",
+            "category": "technology",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_002",
+                "CLUE_005"
+            ],
+            "relatedKnowledge": [
+                "CONC_019"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_018",
+            "name": "Model",
+            "description": "Encapsulates business logic and data. Independent of View/Controller. Can be reused.",
+            "category": "component",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_003",
+                "CLUE_008"
+            ],
+            "relatedKnowledge": [
+                "CONC_012"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_019",
+            "name": "View",
+            "description": "Responsibility for rendering UI. Uses JSP/HTML. Fetches data from Model.",
+            "category": "component",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_003",
+                "CLUE_005"
+            ],
+            "relatedKnowledge": [
+                "CONC_012"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_020",
+            "name": "Controller",
+            "description": "Receives input, calls Model, selects View. In Web, often implemented as Servlet.",
+            "category": "component",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_003",
+                "CLUE_007"
+            ],
+            "relatedKnowledge": [
+                "CONC_012"
+            ]
+        },
+        {
+            "knowledgeId": "CONC_021",
+            "name": "Servlet (interface)",
+            "description": "Core API interface defining lifecycle methods. Classes must implement or extend it.",
+            "category": "interface",
+            "difficulty": 2,
+            "appearsIn": [
+                "SCENE_003",
+                "CLUE_009"
+            ],
+            "relatedKnowledge": [
+                "CONC_002"
+            ]
+        }
+    ],
+    "evidence": [
+        {
+            "evidenceId": "EVIDENCE_001",
+            "name": "Initialization Failure Log",
+            "type": "Documentary",
+            "description": "Shows service() called but init() was skipped due to error.",
+            "foundLocation": "Server Logs",
+            "relatedKnowledge": [
+                "CONC_002"
+            ],
+            "clueIds": [
+                "CLUE_001"
+            ]
+        },
+        {
+            "evidenceId": "EVIDENCE_002",
+            "name": "Leaked Database Connection",
+            "type": "Physical",
+            "description": "Connection pool exhausted due to missing destroy() cleanup.",
+            "foundLocation": "Database Console",
+            "relatedKnowledge": [
+                "CONC_005"
+            ],
+            "clueIds": [
+                "CLUE_002"
+            ]
+        },
+        {
+            "evidenceId": "EVIDENCE_003",
+            "name": "Redirect Chain Analysis",
+            "type": "Digital",
+            "description": "Wireshark capture showing two separate TCP streams for logical single action.",
+            "foundLocation": "Network Monitor",
+            "relatedKnowledge": [
+                "CONC_011"
+            ],
+            "clueIds": [
+                "CLUE_006"
+            ]
+        },
+        {
+            "evidenceId": "EVIDENCE_004",
+            "name": "MVC Blueprint",
+            "type": "Documentary",
+            "description": "Diagram showing layers clearly defined but coupling broken in Controller.",
+            "foundLocation": "Project Wiki",
+            "relatedKnowledge": [
+                "CONC_012"
+            ],
+            "clueIds": [
+                "CLUE_007"
+            ]
+        }
+    ],
+    "endings": [
+        {
+            "endingId": "ENDING_001",
+            "type": "truth",
+            "unlockConditions": {
+                "requiredScenes": [
+                    "SCENE_003"
+                ],
+                "requiredQuestions": [
+                    "Q_031",
+                    "Q_032"
+                ],
+                "requiredClues": [
+                    "CLUE_009",
+                    "CLUE_007"
+                ]
+            },
+            "title": "The Root Cause Revealed",
+            "content": "Cindy admitted using Redirect for SELECT operations unnecessarily, confusing the controller flow. Ben confirmed he missed destroy() to save runtime. Fixing both restores system integrity.",
+            "debrief": "Players learned: 1) Container manages lifecycle; 2) Service() handles traffic with threads; 3) Forward vs Redirect determines scope; 4) MVC ensures clean separation.",
+            "summary": "Life Cycle Stability Restored."
+        }
+    ],
+    "puzzleConfig": {
+        "timeLimit": null,
+        "hintPenalty": 10,
+        "masteryRewardBase": 2,
+        "maxAttemptsDefault": 3
+    }
+}

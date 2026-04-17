@@ -1,0 +1,200 @@
+1. 相关表结构包括：
+CREATE TABLE IF NOT EXISTS parsed_documents (
+  id SERIAL PRIMARY KEY,
+  document_name VARCHAR(255) NOT NULL,
+  document_hash VARCHAR(64) NOT NULL UNIQUE,
+  modules JSONB NOT NULL,
+  summary JSONB,
+  chunks JSONB DEFAULT '[]'::jsonb,
+  concepts JSONB DEFAULT '[]'::jsonb,
+  relationships JSONB DEFAULT '[]'::jsonb,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS scripts (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL,
+  user_id UUID REFERENCES users(id),
+  subject_id UUID REFERENCES subjects(id),
+  content_item_id UUID REFERENCES content_items(id),
+  content_parse_id UUID REFERENCES content_parses(id),
+  template_id UUID REFERENCES script_templates(id),
+  source_id UUID REFERENCES sources_v2(id) ON DELETE SET NULL,
+  parse_id_v2 UUID REFERENCES content_parses_v2(id) ON DELETE SET NULL,
+  title TEXT,
+  status TEXT DEFAULT 'active' CHECK(status IN ('draft','active','completed','abandoned')),
+  difficulty_level TEXT DEFAULT 'easy' NOT NULL CHECK(difficulty_level IN ('easy','medium','hard')),
+  outline_json JSONB DEFAULT '{}'::JSONB NOT NULL,
+  document_hash VARCHAR(64) REFERENCES parsed_documents(document_hash) ON DELETE SET NULL,
+  module_name VARCHAR(255),
+  created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+  completed_at TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+2. 根据知识模块及文档的chunks, concepts, relationships生成的剧本杀JSON结构：
+{
+    "scriptId": "auto_generated_unique_id",
+    "version": "1.0",
+    "title": "Script title (catchy and thematic)",
+    "logline": "One-sentence summary (within 30 characters)",
+    "educational_goals": ["Learning goal 1", "Learning goal 2", "..."],
+
+    "characters": [
+        {
+            "characterId": "CHAR_001",
+            "name": "Character name",
+            "role": "Detective / Suspect / Witness / Victim / Expert Advisor",
+            "age": number,
+            "occupation": "Occupation",
+            "background": "Background story (under 50 words)",
+            "personality": "Personality traits",
+            "secret": "Hidden secret (must relate to a knowledge point)",
+            "knowledgePoints": ["Linked knowledge point 1", "Knowledge point 2"],
+            "goal": "Personal goal for this character",
+            "scenes":["SCENE_001", "SCENE_002","..."]
+        }
+    ],
+
+    "scenes": [
+        {
+            "sceneId": "SCENE_001",
+            "act": 1,
+            "order": 1,
+            "title": "Scene title",
+            "location": "Location name",
+            "description": "Scene description (under 50 words)",
+            "charactersPresent": ["CHAR_001", "CHAR_002"],
+            "clues": ["CLUE_001", "CLUE_002"]
+        }
+    ],
+
+    "clues": [
+        {
+            "clueId": "CLUE_001",
+            "name": "Clue name",
+            "type": "physical/documentary/digital/testimonial",
+            "description": "Clue description",
+            "foundInScene": "SCENE_001",
+            "foundBy": "How it is discovered",
+            "reveals": "What truth it unveils",
+            "relatedKnowledge": ["Knowledge point 1"]
+        }
+    ],
+
+    "questions": [
+        {
+            "questionId": "Q_001",
+            "sceneId": "SCENE_001",
+            "order": 1,
+            "type": "multiple_choice",
+            "difficulty": 1,
+            "content": "Question text",
+            "knowledgeId": "primary_knowledge_id",
+            "relatedKnowledge": ["additional", "knowledge"],
+            "hints": [
+                {
+                    "hintId": "HINT_001",
+                    "content": "Hint text",
+                    "unlockAfterAttempts": 1
+                }
+            ],
+            "maxAttempts": 3,
+            "masteryReward": 2,
+            "options": [
+                {
+                    "optionId": "OPT_001",
+                    "content": "Option text",
+                    "isCorrect": true,
+                    "feedback": "Feedback for this choice",
+                    "nextSceneId": "SCENE_002",
+                    "unlockClues": ["CLUE_003"],
+                    "showHint": "HINT_001"
+                }
+            ],
+            "learnMore": {
+                "knowledgeId": "knowledge_id",
+                "buttonText": "Button text (optional)"
+            }
+        },
+        {
+            "questionId": "Q_002",
+            "sceneId": "SCENE_002",
+            "order": 1,
+            "type": "sequencing",
+            "difficulty": 2,
+            "content": "Arrange items in correct order:",
+            "knowledgeId": "primary_knowledge_id",
+            "items": [
+                {
+                    "itemId": "ITEM_001",
+                    "content": "Item description"
+                }
+            ],
+            "correctOrder": ["ITEM_001", "ITEM_002"],
+            "feedbackCorrect": "Correct! Explanation",
+            "feedbackIncorrect": "Not quite. Try again.",
+            "nextSceneIdCorrect": "SCENE_003",
+            "nextSceneIdIncorrect": "SCENE_002_REVIEW",
+            "maxAttempts": 2,
+            "learnMore": {
+                "knowledgeId": "knowledge_id"
+            }
+        }
+    ],
+
+    "knowledgeBase": [
+        {
+            "knowledgeId": "CONC_001",
+            "name": "Knowledge point name",
+            "description": "Detailed explanation",
+            "category": "category",
+            "difficulty": 1,
+            "appearsIn": ["SCENE_001", "CLUE_001", "CHAR_001"],
+            "relatedKnowledge": ["CONC_002"]
+        }
+    ],
+
+    "evidence": [
+        {
+            "evidenceId": "EVIDENCE_001",
+            "name": "Evidence name",
+            "type": "Physical/Documentary",
+            "description": "Evidence description",
+            "foundLocation": "Where it was found",
+            "relatedKnowledge": ["Knowledge point"],
+            "clueIds": ["CLUE_001"]
+        }
+    ],
+
+    "endings": [
+        {
+            "endingId": "ENDING_001",
+            "type": "truth",
+            "unlockConditions": {
+                "requiredScenes": ["SCENE_003"],
+                "requiredQuestions": ["Q_002"],
+                "requiredClues": ["CLUE_003", "CLUE_004"]
+            },
+            "title": "Ending title",
+            "content": "Full reconstruction of events",
+            "debrief": "Summary of knowledge learned",
+            "summary": "Brief conclusion"
+        }
+    ],
+
+    "puzzleConfig": {
+        "timeLimit": null,
+        "hintPenalty": 10,
+        "masteryRewardBase": 2,
+        "maxAttemptsDefault": 3
+    }
+}
+3. 确保覆盖所有相关知识点及关联性；
+4. 遵循OCP设计原则，易于扩展维护的代码设计；
+5. 采用前端,前后端API接口（通过定义请求体和响应体模型），后端SERVICE层实现业务逻辑，REPOSITORY层实现和数据库表的CRUD；
+6. 采用客观题的形式进行交互推理学习,如选择、排序、判断题；
+7. 推理过程中每个问题旁边有learn more按钮, 跳出弹窗给出文档中的相关知识，有加入待学清单/已掌握两种选择，选择后继续进行接下来的推理流程，待学清单小列表显示在当前推理页的右下角（可选择删掉）
+8. 对于待学清单会有后续另一个页面去实现，不在这个推理学习页面考虑，但需要储存相关数据。
+9.

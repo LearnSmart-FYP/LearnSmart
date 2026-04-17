@@ -1,0 +1,73 @@
+# FastAPI framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Database drivers
+asyncpg>=0.29.0
+psycopg2-binary>=2.9.9
+neo4j>=5.15.0
+qdrant-client==1.12.1
+
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+bcrypt==4.0.1
+
+# HTTP client (for OAuth)
+httpx>=0.26.0
+
+# Settings management
+pydantic[email]>=2.5.0
+pydantic-settings>=2.1.0
+
+# Utilities
+python-multipart>=0.0.6
+aiofiles>=23.2.1
+psutil>=5.9.0
+
+# PDF Processing
+PyMuPDF>=1.23.0
+
+# Image Processing / OCR
+Pillow>=10.0.0
+pytesseract>=0.3.10
+opencv-python>=4.8.0
+
+# Video/Audio Processing
+openai-whisper>=20231117
+moviepy>=1.0.3
+
+# Office Documents Processing
+python-docx>=1.1.0
+openpyxl>=3.1.0
+python-pptx>=0.6.23
+
+# Webpage Processing
+beautifulsoup4>=4.12.0
+lxml>=5.1.0
+
+# LLM & Embeddings
+llama-index-core>=0.10.0
+nest-asyncio>=1.6.0
+
+# Image Classification (CLIP)
+transformers>=4.36.0
+
+# LangChain
+langchain-core>=0.2.2
+langchain-text-splitters>=0.2.0
+langchain-ollama>=0.2.0
+langchain-openai>=0.0.5
+
+# PDF Report Generation
+reportlab>=4.0
+
+# Testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+
+#Data processing
+unstructured>=0.12.6
+
+# LaTeX Compilation
+PyLaTeX>=1.4.2
